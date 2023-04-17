@@ -20,6 +20,7 @@ load_dotenv('config.env')
 try:
     BOT_TOKEN = getConfig('BOT_TOKEN')
     OWNER_ID = int(getConfig('OWNER_ID'))
+    SU_COMMAND = int(getConfig('SU_COMMAND'))
     CHAT_ID = getConfig('CHAT_ID')
     DELAY = int(getConfig('DELAY'))
     DATABASE_URL = getConfig('DATABASE_URL')
