@@ -145,6 +145,7 @@ def cmd_template(update, context):
             f'• <b>white_space</b> - <i>A space character</i>\n'
             f'• <b>tab_space</b> - <i>A tab character</i>\n'
             f'• <b>new_line</b> - <i>A new line character</i>\n\n'
+            f'• <b>command</b> - <i>Add value set by SU_COMMAND</i>\n\n'
             f'<b>Usage</b>: <i>Each key must be separated by a <b>|</b></i>\n'
             f'<b>E.g. template</b>: <i>item_name|new_line|item_link</i>\n\n'
             f'<b>Formatted Feed</b>:\n\n<b>This is a sample item name.</b>\nhttps://www.rss-url.com/item\n\n',
