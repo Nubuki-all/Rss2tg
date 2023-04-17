@@ -1,4 +1,4 @@
-from bot import LOGGER
+from bot import LOGGER, SU_COMMAND
 from markdownify import markdownify
 
 # utilities used by rsshandler
@@ -14,7 +14,7 @@ class UtilHandler():
         self.keys = [
             'feed_name', 'feed_link', 'item_name',
             'item_link', 'item_description', 'item_enclosures',
-            'white_space', 'tab_space', 'new_line'
+            'white_space', 'tab_space', 'new_line', 'command'
         ]
 
         # template string is validated by comparing values of two lists
@@ -32,6 +32,7 @@ class UtilHandler():
                 ' ',
                 '\t',
                 '\n',
+                f'{SU_COMMAND}',
             ]
 
             # combine two lists to represent a key-value pair (dict)
