@@ -29,6 +29,11 @@
         "value": "600",
         "required":true
       },
+      "SU_COMMAND": {
+        "description": "command to append to every new feed.",
+        "value": "/",
+        "required":true
+      },
       "CUSTOM_MESSAGES": {
         "description": "To display a custom message at the top of every new feed.",
         "required": false
