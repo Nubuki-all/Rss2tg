@@ -1,4 +1,7 @@
 import feedparser
+import os
+import sys
+import traceback
 from bot import updater, owner_filter, LOGGER, CHAT_ID, DELAY, CUSTOM_MESSAGES
 from .dbhandler import postgres, rss_dict
 from .utilhandler import utilities
@@ -19,6 +22,7 @@ def cmd_help(update, context):
     update.effective_message.reply_text(
         f'<b>Commands:</b>\n'
         f'• /help: <i>To get this message</i>\n'
+        f'• /restart: <i>To restart this bot</i>\n'
         f'• /list: <i>List your subscriptions</i>\n'
         f'• /get TITLE 10: <i>Force fetch last n item(s)</i>\n'
         f'• /sub TITLE https://www.rss-url.com/feed: <i>Subscribe to a RSS feed</i>\n'
@@ -169,6 +173,17 @@ def cmd_unsuball(update, context):
     else:
         update.effective_message.reply_text("No subscriptions.")
 
+
+# restarts bot.
+def cmd_restart(update, context):
+    try:
+        update.effective_message.reply_text("Restarting…")
+        os.execl(sys.executable, sys.executable, "-m", "bot")
+    except Exception:
+        LOGGER.error(traceback.format_exc())
+        update.effective_message.reply_text("Restarting failed.")
+
+
 # writes the latest feed item to the database when deployed to prevent feed spam
 def init_feeds():
     for name, feed_items in rss_dict.items():
@@ -208,13 +223,16 @@ def rss_monitor(context):
                 # overwrite the existing item with the latest item
                 postgres.update_items(feed_items[0], rss_d.entries[0]['link'], name, rss_d.entries[0]['title'])
         except IndexError:
+            LOGGER.error(traceback.format_exc())
             LOGGER.error(f"There was an error while parsing this feed: {feed_items[0]}")
-            continue
+            context.bot.send_message(CHAT_ID, "`An error occurred. Trying again…`")
+            init_feeds()
+            rss_monitor(context)
+            break
         else:
             LOGGER.info(f"Feed name: {name} | Latest feed item: {rss_d.entries[0]['link']}")
     postgres.rss_load()
     LOGGER.info('Database Updated.')
-
 
 def rss_init():
     job_queue = updater.job_queue
@@ -228,6 +246,7 @@ def rss_init():
     dp.add_handler(CommandHandler("sub", cmd_sub, filters=owner_filter))
     dp.add_handler(CommandHandler("unsub", cmd_unsub, filters=owner_filter))
     dp.add_handler(CommandHandler("unsuball", cmd_unsuball, filters=owner_filter))
+    dp.add_handler(CommandHandler("restart", cmd_restart, filters=owner_filter))
 
     postgres.init()
     init_feeds()

@@ -12,7 +12,8 @@ def main():
             ('sub','Subscribe to a RSS feed'),
             ('unsub','Remove a specific subscription'),
             ('unsuball','Remove all subscriptions'),
-            ('template', 'Set a template to a specific RSS feed')
+            ('template', 'Set a template to a specific RSS feed'),
+            ('restarts', 'Restart bot')
         ]
     bot.set_my_commands(botcmds)
     rss_init()
