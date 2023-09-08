@@ -224,8 +224,10 @@ def rss_monitor(context):
                 postgres.update_items(feed_items[0], rss_d.entries[0]['link'], name, rss_d.entries[0]['title'])
         except IndexError:
             LOGGER.error(traceback.format_exc())
-            LOGGER.error(f"There was an error while parsing this feed: {feed_items[0]}")
-            context.bot.send_message(CHAT_ID, "`An error occurred. Trying again…`")
+            LOGGER.error(
+                f"There was an error while parsing this feed: {feed_items[0]}"
+                " ──── Trying again…"
+            )
             init_feeds()
             rss_monitor(context)
             break
